@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NYT Search</title>
+
+    <!-- Added link to the jQuery Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Added a link to Bootstrap-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!--my own css-->
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<!-- Jumbotron for Title -->
+<div class="container">
+  <ul class="list-group">
+    <li class="list-group-item active text-center"><h1>New York Times Search</h1></li>
+    <li class="list-group-item bg-lgray">Search Parameters</li>
+
+    <form style="border: 1pt black solid; padding: 10px;">
+        <div class="form-group">
+          <label for="exampleFormControlInput1">&nbsp;Search Terms</label>
+          <input type="email" class="form-control" id="searchTerms" placeholder="">
+        </div>
+          <div class="form-group dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Number of Records to Retrieve
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                  <button class="dropdown-item" type="button" data-number="1" > 1</button>
+                  <button class="dropdown-item" type="button" data-number="5" > 5</button>
+                  <button class="dropdown-item" type="button" data-number="10" > 10</button>
+                </div>
+          </div>
+          <div class="form-group">
+              <label for="exampleFormControlInput1">&nbsp;Start Year (Optional)</label>
+              <input type="email" class="form-control" id="startYear" placeholder="">
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlInput1">&nbsp;End Year (Optional)</label>
+                <input type="email" class="form-control" id="endYear" type="input" placeholder="">
+              </div>
+              <button type="button" class="btn btn-outline-primary" type="submit" >Search</button>
+              <button type="button" class="btn btn-outline-secondary" type="reset" >Clear Results</button>
+    </form>
+    <br>
+    <li class="list-group-item bg-lgray">Top Search Results</li>
+    <li class="list-group-item">
+      <div id="searchResults"></div>
+    </li>
+    </ul>
+
+
+        <script type="text/javascript">
+          var searchTerm = "apple";
+          var startYearComplete = startYear + "0101";
+          var endYearComplete = endYear + "1231";
+          var numRecords = 5;
+          $(".dropdown-item").on("click", function () {
+            numRecords = $(this).attr("data-number");
+          });
+          $("#searchButton").click(function () {
+            searchTerm = $("#searchTerms").val();
+            startYear = parseInt($("#startYear").val());
+            endYear = parseInt($("#endYear").val());
+          });
+          console.log(numRecords);
+          console.log(startYearComplete);
+          console.log(endYearComplete);
+          var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+          url += '?' + $.param({
+            'api-key': "8f3c5bdb487e48b4be96e8a4acb9f3c0",
+            'q': searchTerm,
+            'begin_date': startYearComplete,
+            'end_date': endYearComplete
+          });
+          console.log(url);
+          $.ajax({
+            url: url,
+            method: 'GET',
+          }).done(function (result) {
+            var newArray = [];
+            for (var i = 0; i < numRecords; i++) {
+              newArray.push(result.response.docs[i])
+            }
+            console.log(newArray);
+          }).fail(function (err) {
+            throw err;
+          });
+        </script>
+    Collapse 
+    
+    Message Input
+    
+    Message Ize Imai, Brandon Gee, Troy Wynn
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+</body>
+</html>
